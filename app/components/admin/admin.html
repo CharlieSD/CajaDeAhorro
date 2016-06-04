@@ -1,0 +1,152 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+	<form class="navbar-form navbar-right" role="search">
+		<span ng-if="user.loged" uib-dropdown class="pull-right link-span" style="cursor:pointer"  >
+		      <span  uib-dropdown-toggle>
+		      
+		        <strong>{{user.nombre}}</strong> <span class="caret"></span>
+		      
+		    </span>
+		    <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-single-button">
+		      <li role="menuitem" ><a href="" ng-click="vm.logOut()">Cerrar sesión</a></li>
+
+		    </ul>
+		</span>
+	</form>
+  </div>
+</nav>
+
+
+<uib-alert class=" alert-fixed-top" style="margin-top:55px" ng-repeat="alert in alertas track by $index" type="{{alert.type}}" dismiss-on-timeout="2700" close="vm.removeAlert(alert)">{{alert.msg}}</uib-alert>
+	
+<div ng-if="!user.loged"><br><br>
+	<div class="col-sm-4 col-sm-offset-4 tab-body">
+			<h2 class="text-center"> <strong>{{string.str1}} </strong></h2>
+			<div class="text-center"> 
+				<img src="assets/img/icon/profle.png"  alt="">
+			</div>
+			<div class="text-center">
+				<h3> <strong>{{ user.nombre }}</strong> </h3>
+			</div>	
+			<div class="text-center">
+				<br>
+				<input type="password" ng-model="password" placeholder="{{string.str2}}" class="form-control" >
+				<br>
+			</div>
+			<button class="btn btn-success btn-block" ng-click="vm.logIn(password)" ng-disabled="!password">{{string.str3}}</button>
+	</div>
+</div>
+
+<div class="container" ng-if="user.loged">
+	<div class="row">
+		<div class="col-sm-12 tab-body">
+			<div class="col-sm-6"><h3><strong>{{string.str4}}</strong> {{vm.grupo.nombre}} </h3></div>
+			<div class="col-sm-6 text-right"><h3><strong>{{string.str5}}</strong> {{vm.grupo.ahorroTotal}} pesos</h3></div>
+			<div class="col-sm-12 text-center">
+				<br>
+				<h2>{{vm.grupo.logros}} <strong> {{vm.grupo.premio | uppercase}}</strong> {{vm.grupo.comon}} <strong> {{vm.grupo.premio2  | uppercase}}</strong> </h2>
+				<br>
+			</div>
+		</div>
+		<div class="col-sm-12"><br></div>
+		<div class="col-sm-12 tab-body">
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-4 text-center">
+						<strong>{{string.str7}}</strong>
+					</div>
+					<div class="col-sm-2 text-center">
+						<strong>{{string.str8}}</strong>
+					</div>
+					<div class="col-sm-2 text-center">
+						<strong>{{string.str9}}</strong>
+					</div>
+					<div class="col-sm-2 text-center">
+						<strong>{{string.str10}}</strong>
+					</div>
+					<div class="col-sm-2 text-center">
+						
+					</div>
+					<div class="col-sm-12 row-table" ng-repeat="ahorrador in vm.ahorradores" >
+						<div class="col-sm-4"> {{ ahorrador.nombre }} </div>
+						<div class="col-sm-2 text-center"> {{ ahorrador.saldo }} </div>
+						<div class="col-sm-2 text-center"> {{ ahorrador.prestamos}} </div>
+						<div class="col-sm-2 text-center"> {{ ahorrador.deuda }}</div>
+						<div class="col-sm-2 text-right"> <button class="btn btn-danger "  ng-show="edit" ng-click="edit = !edit">cancelar</button> <button ng-show="!edit" class="btn btn-default" uib-tooltip="Editar" ng-init="edit = false" ng-click="edit=!edit">Editar</button></div>
+						<div class="col-sm-12"  style="border-top-style:solid;border-top-color:#f3f3f3;border-top-width:1px;margin-top: 10px;padding-top:10px" ng-show="edit">
+							<div class="row ">
+								<div class="col-sm-4" ng-click="deposito = true;prestamo=false;historial=false">
+									<button class="btn btn-primary btn-block">{{string.str11}}</button>
+								</div>
+								<div class="col-sm-4">
+									<button class="btn btn-primary btn-block" ng-click="deposito = false;prestamo=true;historial=false">{{string.str12}}</button>
+								</div>
+								<div class="col-sm-4">
+									<button class="btn btn-primary btn-block" ng-click="deposito = false;prestamo=false;historial=true">{{string.str13}}</button>
+								</div>
+							</div>
+								<div ng-show="deposito" style="border-top-style:solid;border-top-color:#f3f3f3;border-top-width:1px;margin-top: 10px;padding-top:10px">
+									<div class="col-sm-12">
+										<button type="button" class="close" aria-label="Close" ng-click="deposito = false"><span aria-hidden="true">&times;</span></button>
+									</div>
+
+									<div class="form-inline">
+										<div class="form-group">
+											<label for="">Concepto</label>
+											<select name="" id="" ng-model="dep.concepto" ng-options="concepto.id as concepto.nombre for concepto in conceptos"></select>
+										</div>
+										<div class="form-group">
+											<label for="">Total</label>
+											<input type="number" class="form-control" ng-model="dep.total" >
+											<button class="btn btn-success" ng-click="vm.putDeposit(dep,ahorrador)">Aceptar</button>
+										</div>
+									</div>
+								</div>
+								<div ng-show="prestamo" style="border-top-style:solid;border-top-color:#f3f3f3;border-top-width:1px;margin-top: 10px;padding-top:10px">
+									<div class="col-sm-12">
+										<button type="button" class="close" aria-label="Close" ng-click="prestamo = false"><span aria-hidden="true">&times;</span></button>
+									</div>
+									<div class="form-inline">
+										<div class="form-group" style="    padding-right: 50px;">
+											<label for="" >Total</label>
+											<input type="number" class="form-control"  ng-model="pre.total" >
+										</div>
+										<div class="form-group "  style="    padding-right: 50px;">
+											<label for="">Total a pagar en 1 mes </label>
+											<label for="">{{ vm.calculoConImpuesto(pre.total) }}</label>
+										</div>
+										<div class="form-group">
+											<button class="btn btn-success" ng-disabled="pre.total > ahorrador.saldo" ng-click="putPrestamo(dep,ahorrador)">Aceptar</button>
+										</div>
+									</div>
+
+								</div>
+								<div ng-show="historial" style="border-top-style:solid;border-top-color:#f3f3f3;border-top-width:1px;margin-top: 10px;padding-top:10px">
+									<div class="col-sm-12">
+										<button type="button" class="close" aria-label="Close" ng-click="historial = false"><span aria-hidden="true">&times;</span></button>
+									</div>
+									<div class="col-sm-12"  >
+										<div class="col-sm-4 text-center"> <strong> Fecha</strong></div>
+										<div class="col-sm-4 text-center"> <strong> Concepto</strong></div>
+										<div class="col-sm-4 text-center"> <strong> Total</strong></div>
+									</div>			 
+									<div class="col-sm-12" style="border-top-style:solid;border-top-color:#f3f3f3;border-top-width:1px;margin-top: 10px;padding-top:10px" ng-repeat="historial in ahorrador.historial">
+										<div class="col-sm-4 text-center">{{historial.fecha }}</div>
+										<div class="col-sm-4 text-center">
+											<span ng-if="historial.concepto == 1">deposito</span>
+											<span ng-if="historial.concepto == 2">prestamo </span>
+											<span ng-if="historial.concepto == 3">pago</span>
+										</div>
+										<div class="col-sm-4 text-center">{{historial.total}}</div>
+									</div>
+
+								</div>
+			
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
