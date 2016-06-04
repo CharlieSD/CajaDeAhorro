@@ -1,0 +1,14 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+	<form class="navbar-form navbar-right" role="search">
+	  <div class="form-group" ng-show="sesion">
+		<input type="number" placeholder="id Usuario" ng-model="usrId" class="form-control">
+		<button class="btn btn-default" ng-click="vm.checkUser(usrId)" > Entrar </button>
+	  </div>
+	  <button ng-show="!sesion" ng-click="sesion = !sesion" class="btn btn-default">Inicia Sesion</button>
+	</form>
+  </div>
+</nav>
+
+
+<uib-alert class=" alert-fixed-top" style="margin-top:55px" ng-repeat="alert in alertas track by $index" type="{{alert.type}}" dismiss-on-timeout="2700" close="vm.removeAlert(alert)">{{alert.msg}}</uib-alert>
